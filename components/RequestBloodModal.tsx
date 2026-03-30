@@ -67,6 +67,7 @@ export default function RequestBloodModal({ donor, onClose }: RequestBloodModalP
         // Insert profile
         await supabase.from("profiles").insert([{
           id: recipientId,
+          full_name: name,
           role: "recipient",
           active: true,
           points: 0

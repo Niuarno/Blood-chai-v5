@@ -45,6 +45,7 @@ function RegisterForm() {
       const { error: profileError } = await supabase.from("profiles").insert([
         {
           id: data.user.id,
+          full_name: name,
           role,
           active: role === "donor", // Donors active by default
           points: 0,

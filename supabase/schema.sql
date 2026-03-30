@@ -36,6 +36,7 @@ CREATE TABLE profiles (
 -- RLS: Users can read all active donors, and their own profile
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public profiles are viewable by everyone" ON profiles FOR SELECT USING (true);
+CREATE POLICY "Users can insert own profile" ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
 CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
 -- Note: Admins bypass RLS using the service_role key
 
@@ -68,6 +69,7 @@ CREATE TABLE donation_history (
 
 ALTER TABLE donation_history ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Users can view their own history" ON donation_history FOR SELECT USING (auth.uid() = donor_id OR auth.uid() = recipient_id);
+CREATE POLICY "Users can insert their own history" ON donation_history FOR INSERT WITH CHECK (auth.uid() = donor_id OR auth.uid() = recipient_id);
 
 -- Trigger to automatically update donor's last_donation_at, inactive status, and give points
 CREATE OR REPLACE FUNCTION on_donation_history_insert()
