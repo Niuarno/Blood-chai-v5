@@ -1,0 +1,243 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0f0a0a;
+  color: #f5f0f0;
+  font-family: "Inter", "Hind Siliguri", sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #1a0f0f;
+}
+::-webkit-scrollbar-thumb {
+  background: #c62828;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ff5f52;
+}
+
+/* Glass card */
+.glass-card {
+  background: rgba(26, 15, 15, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(198, 40, 40, 0.2);
+  border-radius: 1rem;
+}
+
+.glass-card-hover {
+  transition: all 0.3s ease;
+}
+.glass-card-hover:hover {
+  border-color: rgba(198, 40, 40, 0.5);
+  box-shadow: 0 0 30px rgba(198, 40, 40, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Glow text */
+.glow-text {
+  text-shadow: 0 0 20px rgba(198, 40, 40, 0.7);
+}
+
+/* Blood drop animation */
+.blood-drop {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Gradient border */
+.gradient-border {
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, #c62828, #7f0000);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* Button styles */
+.btn-primary {
+  @apply bg-blood text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300
+    hover:bg-blood-dark hover:shadow-lg hover:shadow-blood/30 active:scale-95;
+}
+
+.btn-secondary {
+  @apply bg-transparent border border-blood/50 text-blood-light px-6 py-3 rounded-xl font-semibold 
+    transition-all duration-300 hover:bg-blood/10 hover:border-blood active:scale-95;
+}
+
+.btn-ghost {
+  @apply bg-surface-card text-gray-300 px-6 py-3 rounded-xl font-semibold transition-all duration-300
+    hover:bg-surface-border hover:text-white active:scale-95;
+}
+
+/* Input styles */
+.input-field {
+  @apply w-full bg-surface-card border border-surface-border rounded-xl px-4 py-3 text-white
+    placeholder-gray-500 focus:outline-none focus:border-blood focus:ring-1 focus:ring-blood/50
+    transition-all duration-200;
+}
+
+.input-label {
+  @apply block text-sm font-medium text-gray-400 mb-2;
+}
+
+/* Status badges */
+.badge-available {
+  @apply bg-green-900/50 text-green-400 border border-green-700/50 px-3 py-1 rounded-full text-xs font-semibold;
+}
+.badge-unavailable {
+  @apply bg-gray-900/50 text-gray-400 border border-gray-700/50 px-3 py-1 rounded-full text-xs font-semibold;
+}
+.badge-pending {
+  @apply bg-yellow-900/50 text-yellow-400 border border-yellow-700/50 px-3 py-1 rounded-full text-xs font-semibold;
+}
+.badge-accepted {
+  @apply bg-blue-900/50 text-blue-400 border border-blue-700/50 px-3 py-1 rounded-full text-xs font-semibold;
+}
+.badge-declined {
+  @apply bg-red-900/50 text-red-400 border border-red-700/50 px-3 py-1 rounded-full text-xs font-semibold;
+}
+.badge-completed {
+  @apply bg-green-900/50 text-green-400 border border-green-700/50 px-3 py-1 rounded-full text-xs font-semibold;
+}
+.badge-critical {
+  @apply bg-red-900/70 text-red-300 border border-red-600/70 px-3 py-1 rounded-full text-xs font-bold animate-pulse;
+}
+.badge-medium {
+  @apply bg-orange-900/50 text-orange-400 border border-orange-700/50 px-3 py-1 rounded-full text-xs font-semibold;
+}
+.badge-low {
+  @apply bg-teal-900/50 text-teal-400 border border-teal-700/50 px-3 py-1 rounded-full text-xs font-semibold;
+}
+
+/* Blood group badge */
+.blood-group-badge {
+  @apply bg-blood/20 text-blood-light border border-blood/40 px-2 py-0.5 rounded-lg text-sm font-bold;
+}
+
+/* Page section */
+.section {
+  @apply py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto;
+}
+
+/* Hero gradient overlay */
+.hero-gradient {
+  background: radial-gradient(ellipse at center, rgba(198, 40, 40, 0.15) 0%, transparent 70%);
+}
+
+/* Particle dot */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(198, 40, 40, 0.5);
+  animation: float 8s ease-in-out infinite;
+}
+
+/* Admin sidebar */
+.admin-sidebar-item {
+  @apply flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 transition-all duration-200
+    hover:bg-blood/10 hover:text-blood-light cursor-pointer;
+}
+.admin-sidebar-item.active {
+  @apply bg-blood/20 text-blood-light border border-blood/30;
+}
+
+/* Table styles */
+.data-table {
+  @apply w-full;
+}
+.data-table th {
+  @apply text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-4 py-3 
+    bg-surface-card border-b border-surface-border;
+}
+.data-table td {
+  @apply px-4 py-4 text-sm text-gray-300 border-b border-surface-border/50;
+}
+.data-table tr:hover td {
+  @apply bg-surface-card/50;
+}
+
+/* Modal overlay */
+.modal-overlay {
+  @apply fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4;
+}
+.modal-content {
+  @apply bg-surface-card border border-surface-border rounded-2xl p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto;
+}
+
+/* Notice board */
+.notice-card {
+  @apply glass-card p-4 border-l-4 border-blood;
+}
+
+/* Stat card */
+.stat-card {
+  @apply glass-card glass-card-hover p-6 text-center;
+}
+
+/* Nav link */
+.nav-link {
+  @apply text-gray-400 hover:text-white transition-colors duration-200 font-medium;
+}
+.nav-link.active {
+  @apply text-blood-light;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px #c62828, 0 0 10px #c62828; }
+  100% { box-shadow: 0 0 20px #c62828, 0 0 40px #c62828, 0 0 60px #7f0000; }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(30px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #1a0f0f 25%, #2d1515 50%, #1a0f0f 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
