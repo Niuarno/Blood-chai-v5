@@ -69,7 +69,7 @@ function RegisterForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative px-4 py-12">
-      <div className="absolute inset-0 z-0 hero-gradient pointer-events-none" />
+      <div className="fixed inset-0 z-0 hero-gradient pointer-events-none" />
       
       <FadeIn className="w-full max-w-md relative z-10">
         <div className="glass-card p-8 shadow-2xl shadow-blood/10">

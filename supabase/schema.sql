@@ -25,6 +25,7 @@ CREATE TABLE profiles (
   district TEXT,
   upazila TEXT,
   phone TEXT,
+  emergency_phone TEXT,
   email TEXT,
   avatar_url TEXT,
   active BOOLEAN DEFAULT true,

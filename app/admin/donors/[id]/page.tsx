@@ -101,6 +101,8 @@ export default function AdminDonorProfilePage({ params }: { params: Promise<{ id
             <div className="text-sm text-gray-400 space-y-1 mb-6">
               <p>📍 {profile.upazila}, {profile.district}, {profile.division}</p>
               <p>📅 Joined {format(parseISO(profile.created_at || new Date().toISOString()), "MMM yyyy")}</p>
+              <p>📞 Phone: {profile.phone || "Not provided"}</p>
+              <p>🚨 Emergency: {profile.emergency_phone || "Not provided"}</p>
             </div>
 
             <button 

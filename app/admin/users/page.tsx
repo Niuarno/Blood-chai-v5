@@ -88,6 +88,7 @@ export default function AdminUsersPage() {
                   <th>User</th>
                   <th>Role</th>
                   <th>Blood Group</th>
+                  <th>Contact</th>
                   <th>Location</th>
                   <th>Status</th>
                   <th>Action</th>
@@ -116,6 +117,12 @@ export default function AdminUsersPage() {
                     </td>
                     <td>
                       {u.blood_group ? <span className="blood-group-badge">{u.blood_group}</span> : <span className="text-gray-600">-</span>}
+                    </td>
+                    <td>
+                      <div className="flex flex-col text-xs">
+                        <span className="text-gray-300">{u.phone || "No Phone"}</span>
+                        {u.emergency_phone && <span className="text-gray-500 text-[10px]">{u.emergency_phone} (Emg)</span>}
+                      </div>
                     </td>
                     <td>
                       {u.district ? (

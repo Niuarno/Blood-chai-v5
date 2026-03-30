@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Droplets, ShieldCheck, Activity, Search, AlertCircle, ArrowRight } from "lucide-react";
+import { Droplets, ShieldCheck, Activity, Search, AlertCircle, ArrowRight, MapPin } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { SlideIn, FadeIn, HoverCard } from "@/components/animations";
@@ -152,6 +152,45 @@ export default async function HomePage() {
                   <h3 className="text-xl font-bold text-white mb-3">{step.title}</h3>
                   <p className="text-gray-400 text-sm leading-relaxed">{step.desc}</p>
                 </HoverCard>
+              </FadeIn>
+            ))}
+          </div>
+        </section>
+
+        {/* HEARTBEATS - REVIEWS */}
+        <section className="section">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 flex items-center justify-center gap-3">
+              <Activity className="w-8 h-8 text-blood" /> Heartbeats
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">Stories of hope from people whose lives were changed by our donors.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { name: "Rahim Chowdhury", location: "Dhaka", quote: "My father needed O- blood urgently. BloodChai connected us to a donor within 15 minutes. Truly life-saving." },
+              { name: "Ayesha Siddiqua", location: "Chittagong", quote: "I've been donating for years, but the gamified points and easy dashboard make it so much more rewarding." },
+              { name: "Kamrul Hasan", location: "Sylhet", quote: "The emergency callout feature works like magic. The admins manually arranged a donor at 2 AM. Forever grateful." }
+            ].map((review, i) => (
+              <FadeIn key={i} delay={i * 0.1}>
+                <div className="glass-card p-6 h-full flex flex-col relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-blood/10 rounded-bl-full -z-10" />
+                  <div className="flex items-center gap-1 mb-4 text-yellow-500 text-sm">
+                    {'★★★★★'.split('').map((star, idx) => <span key={idx}>{star}</span>)}
+                  </div>
+                  <p className="text-gray-300 italic mb-6 leading-relaxed flex-grow">"{review.quote}"</p>
+                  <div className="flex items-center gap-3 mt-auto pt-4 border-t border-surface-border">
+                    <div className="w-10 h-10 rounded-full bg-surface-DEFAULT border border-surface-border flex items-center justify-center font-bold text-white">
+                      {review.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h4 className="text-white font-bold text-sm">{review.name}</h4>
+                      <p className="text-xs text-gray-400 flex items-center gap-1">
+                        <MapPin className="w-3 h-3" /> {review.location}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </FadeIn>
             ))}
           </div>

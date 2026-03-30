@@ -16,6 +16,7 @@ export default function RecipientLayout({ children }: { children: React.ReactNod
 
   const navItems = [
     { href: "/recipient/dashboard", label: "My Requests", icon: <Activity className="w-5 h-5" /> },
+    { href: "/recipient/profile", label: "Profile Settings", icon: <User className="w-5 h-5" /> },
   ];
 
   return (

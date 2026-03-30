@@ -8,7 +8,7 @@ import { divisions, getDistricts, getUpazilas, bloodGroups } from "@/lib/banglad
 import toast from "react-hot-toast";
 import Avatar from "@/components/Avatar";
 
-export default function DonorProfilePage() {
+export default function RecipientProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -22,7 +22,6 @@ export default function DonorProfilePage() {
     upazila: "",
     phone: "",
     emergency_phone: "",
-    active: true,
     avatar_url: ""
   });
 
@@ -46,7 +45,6 @@ export default function DonorProfilePage() {
             upazila: data.upazila || "",
             phone: data.phone || "",
             emergency_phone: data.emergency_phone || "",
-            active: data.active,
             avatar_url: data.avatar_url || ""
           });
         }
@@ -106,14 +104,13 @@ export default function DonorProfilePage() {
 
       // 2. Update profile table
       const { error } = await supabase.from("profiles").update({
-        full_name: profile.full_name, // Sync down to profile table for easier querying
+        full_name: profile.full_name,
         blood_group: profile.blood_group,
         division: profile.division,
         district: profile.district,
         upazila: profile.upazila,
         phone: profile.phone,
         emergency_phone: profile.emergency_phone,
-        active: profile.active,
         avatar_url: profile.avatar_url,
       }).eq("id", profile.id);
 
@@ -138,8 +135,8 @@ export default function DonorProfilePage() {
     <div className="p-6 md:p-10 max-w-4xl mx-auto space-y-8">
       <SlideIn>
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">My Profile</h1>
-          <p className="text-gray-400">Manage your personal information and availability.</p>
+          <h1 className="text-3xl font-bold text-white mb-2">My Profile Settings</h1>
+          <p className="text-gray-400">Manage your personal information and contact details.</p>
         </div>
       </SlideIn>
 
@@ -152,8 +149,7 @@ export default function DonorProfilePage() {
             <div className="flex flex-col items-center md:items-start space-y-3">
               <h3 className="text-lg font-bold text-white">Profile Picture</h3>
               <p className="text-gray-400 text-sm text-center md:text-left max-w-sm">
-                Upload a clear photo so recipients can easily identify you when meeting. 
-                <span className="text-blood-light block mt-1">Note: Images will not be stretched.</span>
+                Upload a clear photo so donors can identify you quickly when responding to your requests.
               </p>
               
               <div className="relative mt-2">
@@ -184,7 +180,7 @@ export default function DonorProfilePage() {
             {/* Basics */}
             <div className="space-y-6">
               <h3 className="text-xl font-bold text-white border-b border-surface-border pb-4 flex items-center gap-2">
-                <User className="w-5 h-5 text-blood" /> Basic Info
+                <User className="w-5 h-5 text-blood" /> Contact Info
               </h3>
               
               <div>
@@ -199,9 +195,8 @@ export default function DonorProfilePage() {
               </div>
 
               <div>
-                <label className="input-label">Blood Group</label>
+                <label className="input-label">Blood Group (Optional)</label>
                 <select
-                  required
                   value={profile.blood_group}
                   onChange={e => setProfile({...profile, blood_group: e.target.value})}
                   className="input-field appearance-none"
@@ -212,10 +207,9 @@ export default function DonorProfilePage() {
               </div>
 
               <div>
-                <label className="input-label">Phone Number (Required)</label>
+                <label className="input-label">Phone Number</label>
                 <input
                   type="tel"
-                  required
                   value={profile.phone}
                   onChange={e => setProfile({...profile, phone: e.target.value})}
                   className="input-field"
@@ -224,7 +218,7 @@ export default function DonorProfilePage() {
               </div>
 
               <div>
-                <label className="input-label">Emergency Phone (Optional)</label>
+                <label className="input-label">Emergency Contact (Optional)</label>
                 <input
                   type="tel"
                   value={profile.emergency_phone}
@@ -233,35 +227,15 @@ export default function DonorProfilePage() {
                   placeholder="e.g. 01XXXXXXXXX"
                 />
               </div>
-
-              <div>
-                <label className="flex items-center gap-3 cursor-pointer p-4 rounded-xl border border-surface-border bg-surface-DEFAULT hover:border-blood/30 transition-colors">
-                  <div className="relative">
-                    <input
-                      type="checkbox"
-                      className="peer sr-only"
-                      checked={profile.active}
-                      onChange={e => setProfile({...profile, active: e.target.checked})}
-                    />
-                    <div className="w-11 h-6 bg-surface-card border border-surface-border rounded-full peer peer-checked:bg-green-500/20 peer-checked:border-green-500 transition-all"></div>
-                    <div className="absolute left-1 top-1 w-4 h-4 rounded-full bg-gray-500 peer-checked:bg-green-500 peer-checked:translate-x-5 transition-all"></div>
-                  </div>
-                  <div>
-                    <div className="font-bold text-white text-sm">Available for Donation</div>
-                    <div className="text-xs text-gray-400">Toggle off if you are temporarily unavailable.</div>
-                  </div>
-                </label>
-              </div>
             </div>
 
             {/* Location */}
             <div className="space-y-6">
-              <h3 className="text-xl font-bold text-white border-b border-surface-border pb-4">Location Info</h3>
+              <h3 className="text-xl font-bold text-white border-b border-surface-border pb-4">General Location</h3>
               
               <div>
                 <label className="input-label">Division</label>
                 <select
-                  required
                   value={profile.division}
                   onChange={handleDivisionChange}
                   className="input-field appearance-none"
@@ -274,7 +248,6 @@ export default function DonorProfilePage() {
               <div>
                 <label className="input-label">District</label>
                 <select
-                  required
                   value={profile.district}
                   onChange={handleDistrictChange}
                   disabled={!profile.division}
@@ -288,7 +261,6 @@ export default function DonorProfilePage() {
               <div>
                 <label className="input-label">Upazila</label>
                 <select
-                  required
                   value={profile.upazila}
                   onChange={e => setProfile({...profile, upazila: e.target.value})}
                   disabled={!profile.district}
@@ -309,7 +281,7 @@ export default function DonorProfilePage() {
               className="btn-primary w-full md:w-auto px-8 py-3 flex items-center justify-center gap-2"
             >
               {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-              {saving ? "Saving Changes..." : "Save Profile Changes"}
+              {saving ? "Saving Changes..." : "Save Profile Settings"}
             </button>
           </div>
         </FadeIn>

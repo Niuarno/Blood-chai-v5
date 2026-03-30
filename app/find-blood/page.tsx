@@ -29,8 +29,7 @@ export default function FindBloodPage() {
   const [bloodGroup, setBloodGroup] = useState("");
   
   const [donors, setDonors] = useState<DonorPreview[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [searched, setSearched] = useState(false);
+  const [loading, setLoading] = useState(true);
   
   const [selectedDonor, setSelectedDonor] = useState<{id: string, full_name: string} | null>(null);
 
@@ -40,34 +39,23 @@ export default function FindBloodPage() {
   useEffect(() => { setDistrict(""); setUpazila(""); }, [division]);
   useEffect(() => { setUpazila(""); }, [district]);
 
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!division) return; // Basic validation
-    
+  const fetchDonors = async () => {
     setLoading(true);
-    setSearched(true);
-    
-    // We need to fetch from profiles. Because we want full name, we have to look up users via an RPC or 
-    // we assume we store full_name in the profiles table to make querying easier.
-    // *Important Design Choice*: The implementation plan mentions extending auth.users in profiles.
-    // We will assume profiles has: id, full_name, avatar_url, blood_group, division, district, upazila, active.
-    
     try {
       let query = supabase.from("profiles")
         .select("id, full_name, avatar_url, blood_group, division, district, upazila, active")
-        .eq("role", "donor")
-        .eq("division", division);
+        .eq("role", "donor");
         
+      if (division) query = query.eq("division", division);
       if (district) query = query.eq("district", district);
       if (upazila) query = query.eq("upazila", upazila);
       if (bloodGroup) query = query.eq("blood_group", bloodGroup);
       
-      const { data, error } = await query;
+      // Limit to 100 to prevent massive payloads if no filters
+      const { data, error } = await query.limit(100);
       
       if (error) throw error;
       
-      // Filter out only available in frontend (per requirement: show available/unavailable with labels, but after selection only show available if required. Actually requirement says "after user selects area it should only show the available donors"). Wait, let's just fetch all and only render active ones, or render both with clear badges.
-      // Requirement: "after a user selects a area it should only show the available donors" - Ok, let's filter purely active.
       const activeDonors = (data || []).filter(d => d.active);
       setDonors(activeDonors as unknown as DonorPreview[]);
       
@@ -77,6 +65,10 @@ export default function FindBloodPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchDonors();
+  }, [division, district, upazila, bloodGroup]);
 
   return (
     <div className="min-h-screen flex flex-col pt-24">
@@ -99,8 +91,13 @@ export default function FindBloodPage() {
         </SlideIn>
 
         <FadeIn delay={0.1}>
-          <div className="glass-card p-6 md:p-8 mb-12">
-            <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="glass-card p-6 md:p-8 mb-12 relative">
+            {loading && (
+              <div className="absolute top-4 right-4">
+                <div className="w-5 h-5 border-2 border-blood/50 border-t-blood rounded-full animate-spin" />
+              </div>
+            )}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               
               <div>
                 <label className="input-label">Division <span className="text-blood">*</span></label>
@@ -156,18 +153,12 @@ export default function FindBloodPage() {
                 </div>
               </div>
 
-              <div className="flex items-end">
-                <button type="submit" disabled={loading} className="btn-primary w-full h-[50px] flex justify-center items-center gap-2">
-                  {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Search className="w-5 h-5" />}
-                  Search
-                </button>
-              </div>
-            </form>
+            </div>
           </div>
         </FadeIn>
 
         {/* Results */}
-        {searched && !loading && (
+        {!loading && (
           <FadeIn delay={0.2} className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-bold text-white flex items-center gap-2">
@@ -217,6 +208,12 @@ export default function FindBloodPage() {
               </div>
             )}
           </FadeIn>
+        )}
+        
+        {loading && donors.length === 0 && (
+          <div className="flex justify-center py-20">
+            <div className="w-10 h-10 border-4 border-blood/30 border-t-blood rounded-full animate-spin" />
+          </div>
         )}
       </main>
       
